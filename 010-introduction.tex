@@ -4,34 +4,22 @@
 \section{Introduction}%
 \label{sec:introduction}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1.0\linewidth]{extrapolationOptions}
-    \caption{Extrapolation Methods Over Two Solve Steps}%
-    \label{fig:extrapMethods}
-\end{figure}
+Neuro-VISOR is a project which visualizes the Hodgkin-Huxley model on neuron geometries in real time\cite{neuroVISOR}.
+One difficulty with real time simulations is that the computation time for a solve step may take longer than the time between visualization updates.
+When this happens, it results in the simulation freezing until the computation is complete followed by an abrupt jump to the computed values.
+This behaviour is not desired due to the negative user experience.
+This project's aim is to explore possible solutions to this problem using extrapolation methods.
 
-As we can see in \cref{fig:extrapMethods}, the professor is holding an apple.
+The main result of this project is the program neuropy\cite{neuropy}.
+The purpose of the program is to generate visualizations of the Hodgkin-Huxley model on neuron geometries utilizing extrapolation methods to minimize the impact of performance issues.
+The code has two main steps; importing data and generating the visualizations.
+Since generating the data and neuron geometries aren't the focus of the project, neuropy requires this information to be given as input files.
+This can be done using Neuro-VISOR, but neuropy will take any pair of ``.csv'' and ``.swc'' files with corresponding indices.
+It is designed to make comparison of different extrapolation methods and contexts easy and straightforward. 
+All three of the linear function definitions explained in \cref{sec:extrapolation} are implemented, and new extrapolation methods can be added by simply adding a new python function.
 
-\begin{table}[H]
-    \begin{center}
-    \caption{Table captions go on top of the tables}%
-    \label{tab:example}
-    \begin{tabular}{ccc}
-        \toprule
-        a & b & c \\
-        \midrule
-        0 & 2 & 4 \\
-        \bottomrule
-    \end{tabular}
-    \end{center}
-\end{table}
-
-\subsection{Lorem ipsum}%
-\label{sub:lorem_ipsum}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultricies est sit amet interdum ornare. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut nulla lectus, bibendum ultrices dui quis, sodales suscipit quam. Donec eu finibus lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam eu metus mattis, bibendum massa quis, eleifend libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc lacinia ipsum at dolor tristique convallis. Sed dignissim malesuada nunc, nec malesuada risus sagittis eu. Nulla et erat et mi elementum scelerisque vitae at neque. Suspendisse scelerisque laoreet tellus, sit amet accumsan mauris placerat nec. Vestibulum mollis augue a odio posuere, ut gravida est lacinia. Etiam turpis ligula, molestie nec porta in, malesuada id magna. Donec elementum nulla ac tincidunt fringilla. Suspendisse porta laoreet nisl, non aliquam orci dictum egestas.
-
-Proin euismod consequat felis ut pharetra. Maecenas auctor, nunc ac gravida pretium, metus mi fringilla lectus, auctor scelerisque nunc velit id magna. Etiam sit amet mi sit amet nunc congue ornare non hendrerit diam. Nullam consectetur lectus quis urna vehicula, nec lacinia tortor rhoncus. Vestibulum at enim aliquam, ultricies urna sit amet, porta tellus. Curabitur posuere elit orci, et rutrum nibh cursus eget. Donec ac venenatis purus. Fusce vehicula nisi erat, at tempor turpis congue vitae. Nunc auctor pellentesque malesuada. Nunc sodales, dolor ac sagittis mollis, enim ipsum mollis sem, non porttitor arcu nulla at velit. Ut non velit nec lacus sollicitudin maximus id id tortor. Sed ac aliquam lorem.
-
-Nunc non ante ex. Curabitur lacinia euismod velit, non posuere leo bibendum non. Mauris ac orci non risus feugiat rutrum eu ac velit. Phasellus facilisis lacinia condimentum. Pellentesque vulputate nibh urna, vel varius mauris cursus quis. Aliquam vitae sem ac orci fermentum semper. Praesent est tellus, luctus sed venenatis at, bibendum id purus. Cras at mi sed lorem aliquet congue at sit amet turpis. Aliquam vestibulum tempor mauris, id aliquam ipsum scelerisque ut. In arcu turpis, dapibus ut nisi vel, luctus pellentesque felis. Aenean nisi erat, porttitor eu felis ut, imperdiet aliquam velit. Mauris vitae vehicula leo. Curabitur ut ante et ante pulvinar gravida. Donec tincidunt fringilla erat. Vivamus cursus augue et odio pharetra hendrerit.
+In this write up we explore extrapolation methods, compare their benefits and drawbacks, and mention a couple avenues for future investigation.
+We decide on using linear extrapolation and list different ways of defining the linear function.
+This is followed by an overview of the code written for this project, mainly focusing on a technical overview over how it is used.
+The input files are explained, as are the possible parameters for the commandline program.
+Lastly, we expand on a couple of examples generated by neuropy.

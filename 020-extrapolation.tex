@@ -27,9 +27,9 @@ This corresponds to the yellow option in \cref{fig:extrapMethods}.
 Yet another option is to use the slope between the previous two data points and the point along the previous extrapolation which coincides with the time of the most recent data point.
 This can be seen in \cref{fig:extrapMethods} as the red option.
 
-The goal of the extrapolation is to improve the visualization and user experience of the program during unexpected slow downs.
+As mentioned in the introduction, the goal of this project is to improve the visualization and user experience of the program during unexpected slow downs.
 While this is not rigorously definied, we will suppose abrupt jumps decrease the user's experience.
-Abrupt jumps are jarring and make it difficult to follow the simulation.
+This seems like a reasonable heuristic, as abrupt jumps are jarring and make it difficult to follow the simulation.
 The naive line results in a jump whenever a new data point is calculated unless the system is constant.
 The tangent line also results in a similar number of jumps, but the jumps will generally be smaller than the naive line.
 Because of this, the tangent line is strictly better for our use case.
@@ -38,6 +38,7 @@ However, since it doesn't jump to the most recent data point the error bounds ac
 There are ways of defining the extrapolation line to account for this.
 For example, one could cap the distance between the point used and the previous data point.
 Another way could be to define the slope using both the tangent slope and the distance between the starting point and previous data point.
+While this is an interesting avenue for further research, we will use this definition with the assumption that the error bounds won't cause any issues.
 Experimentally, Neuro-VISOR's time step is small enough for the error bounds to be negligably small\cite{neuropy}.
-Getting explicit information on the error bounds would be an interesting topic to pursue.
-With all of this information, we should choose the tangent line when emphasizing the accuracy and the third option when emphasizing the user experience.
+With all of this information,  we should choose the tangent line when emphasizing the accuracy and the third option when emphasizing the user experience.
+To get a more hands on understanding of the two linear function definitions we have implmented them in neuropy.
