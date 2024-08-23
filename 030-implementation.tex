@@ -4,34 +4,100 @@
 \section{Implementation}%
 \label{sec:implementation}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1.0\linewidth]{extrapolationOptions}
-    \caption{Extrapolation Methods Over Two Solve Steps}%
-    \label{fig:extrapMethods}
-\end{figure}
+The purpose of the program is to generate visualizations of the Hodgkin-Huxley model on neuron geometries utilizing extrapolation methods to minimize the impact of performance issues.
+The code has two main steps; importing data and generating the visualizations.
+Since generating the data and neuron geometries aren't the focus of the project it is largely abstracted away.
+The program only requires a ``.csv'' and a ``.swc'' file with both indices corresponding to each other.
+The visualizations are generated using navis\cite{navis}, a python library for neuron morphologies. 
+It accepts multiple parameters, allowing different rates of reading in the data and extrapolating. 
+It is also able to use any of the three linear function definitions explained in \cref{sec:extrapolation}.
 
-As we can see in \cref{fig:extrapMethods}, the professor is holding an apple.
+
+\subsection{Importing Data}%
+\label{sub:importing_data}
+The simulation values are obtained from Neuro-VISOR\cite{neuroVISOR} and are stored in the ``.csv'' format where each row corresponds to one solve step.
+The Neuron geometries are stored in the ``.swc'' file format\cite{swc} and were obtained from NeuroMorpho\cite{neuroMorpho}.
+It is important to note that the ``.swc'' file currently used in the code is actually obtained from Neuro-VISOR.
+While Neuro-VISOR also obtains it's ``.swc'' files from NeuroMorpho but slightly alters them, changing the order of the node indexes\cite{neuropy}.
+Neuro-VISOR doesn't provide these indices when exporting the simulation data so we are required to use it's neuron geometry files.
+
+\subsection{Visualization}%
+\label{sub:visualization}
+There are multiple temporal parameters which should be properly disambiguated.
+To begin, we assume that in the simulation data file each row is separated by a fixed time step.
+This may be different than the time step of the solver, as is the case in Neuro-VISOR.
+The most straight forward parameter in neuropy is the target fps, $f_t$, which is simply the frames per second (fps) of the output video.
+This should be the first parameter chosen as the other's depend on it.
+The next parameter is the rate of the simulation data, $f_d$ in fps.
+Neuropy will read the next data point every $f_t / f_d$ frames.
+$f_d$ should be a divisor of $f_t$ so none of the frames are hidden or removed.
+Note that the playback speed will also be affected depending on $f_d / f_t$ and the size of the data's fixed time step.
+Another parameter is the number of extrapolation points per $f_d$, denoted $f_e$ which determines how frequently the visualization is updated using the extrapolation values.
+For example, if $f_t=60,f_d=1,f_e=10$ then every $6$ frames the visualization is updated.
+Similar to $f_d$, $f_e$ should be a divisor of $f_t$ in order for the video to display every frame.
+The last parameter is the number of data points skipped per read, $f_s$.
+In other words, whenever a new data point is read it will skip the next $f_s - 1$ rows.
+This is mainly used to easily create large differences between data points which can be useful for creating clear visualization examples.
+
+\subsection{Results}%
+\label{sub:results}
+The main use of neuropy is to study how the extrapolation methods behave given various values for the parameters defined in \cref{sub:visualization}.
+Neuropy includes $62$ examples with different parameter values and extrapolation methods.
+However, due to the relationships between the parameters, the data, and the methods, it can be difficult to pick specific videos which demonstrate interesting differences.
+To alleviate this we will list a few specific examples and what they demonstrate alongside the relevant file names in the neuropy repository\cite{neuropy}.
+For all of the following examples, let $f_t=60$.
+Also, if ``jump'' is $1$ the tangent line was used for extrapolation, otherwise the third option was used.
 
 \begin{table}[H]
     \begin{center}
-    \caption{Table captions go on top of the tables}%
-    \label{tab:example}
-    \begin{tabular}{ccc}
+    \caption{basicComparison\_center.mp4}%
+    \label{tab:exampleOne}
+    \begin{tabular}{c|c|c|c}
         \toprule
-        a & b & c \\
+        $f_d$ & $f_s$ & $f_e$ & jump \\
         \midrule
-        0 & 2 & 4 \\
+        1 & 5 & 0 & 0 \\
+        1 & 5 & 15 & 1 \\
+        1 & 5 & 30 & 0 \\
+        1 & 5 & 30 & 1 \\
         \bottomrule
     \end{tabular}
     \end{center}
+
 \end{table}
 
-\subsection{Lorem ipsum}%
-\label{sub:lorem_ipsum}
+The four configurations in \cref{tab:exampleOne} are chosen to show the difference between no extrapolation and two extrapolations with different rates.
+It also includes both of the extrapolation techniques.
+$f_s$ is set to $5$ to make the four options more easily distinguishable without getting rid of too many data points.
+The first configuration is equivalent to disabling extrapolation, or using naive extrapolation, and is used as the baseline for the other three configurations.
+The last two configurations show the striking difference between the extrapolation methods, and the two configurations using the tangent line are only subtly  different.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ultricies est sit amet interdum ornare. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut nulla lectus, bibendum ultrices dui quis, sodales suscipit quam. Donec eu finibus lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Etiam eu metus mattis, bibendum massa quis, eleifend libero. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nunc lacinia ipsum at dolor tristique convallis. Sed dignissim malesuada nunc, nec malesuada risus sagittis eu. Nulla et erat et mi elementum scelerisque vitae at neque. Suspendisse scelerisque laoreet tellus, sit amet accumsan mauris placerat nec. Vestibulum mollis augue a odio posuere, ut gravida est lacinia. Etiam turpis ligula, molestie nec porta in, malesuada id magna. Donec elementum nulla ac tincidunt fringilla. Suspendisse porta laoreet nisl, non aliquam orci dictum egestas.
+\begin{table}[H]
+    \begin{center}
+    \caption{jumpComparison\_full.mp4}%
+    \label{tab:exampleTwo}
+    \begin{tabular}{c|c|c|c}
+        \toprule
+        $f_d$ & $f_s$ & $f_e$ & jump \\
+        \midrule
+        15 & 1 & 0 & 0 \\
+        1 & 15 & 0 & 0 \\
+        1 & 15 & 30 & 0 \\
+        1 & 15 & 30 & 1 \\
+        \bottomrule
+    \end{tabular}
+    \end{center}
 
-Proin euismod consequat felis ut pharetra. Maecenas auctor, nunc ac gravida pretium, metus mi fringilla lectus, auctor scelerisque nunc velit id magna. Etiam sit amet mi sit amet nunc congue ornare non hendrerit diam. Nullam consectetur lectus quis urna vehicula, nec lacinia tortor rhoncus. Vestibulum at enim aliquam, ultricies urna sit amet, porta tellus. Curabitur posuere elit orci, et rutrum nibh cursus eget. Donec ac venenatis purus. Fusce vehicula nisi erat, at tempor turpis congue vitae. Nunc auctor pellentesque malesuada. Nunc sodales, dolor ac sagittis mollis, enim ipsum mollis sem, non porttitor arcu nulla at velit. Ut non velit nec lacus sollicitudin maximus id id tortor. Sed ac aliquam lorem.
+\end{table}
 
-Nunc non ante ex. Curabitur lacinia euismod velit, non posuere leo bibendum non. Mauris ac orci non risus feugiat rutrum eu ac velit. Phasellus facilisis lacinia condimentum. Pellentesque vulputate nibh urna, vel varius mauris cursus quis. Aliquam vitae sem ac orci fermentum semper. Praesent est tellus, luctus sed venenatis at, bibendum id purus. Cras at mi sed lorem aliquet congue at sit amet turpis. Aliquam vestibulum tempor mauris, id aliquam ipsum scelerisque ut. In arcu turpis, dapibus ut nisi vel, luctus pellentesque felis. Aenean nisi erat, porttitor eu felis ut, imperdiet aliquam velit. Mauris vitae vehicula leo. Curabitur ut ante et ante pulvinar gravida. Donec tincidunt fringilla erat. Vivamus cursus augue et odio pharetra hendrerit.
+The four configurations in \cref{tab:exampleTwo} is more specific than \cref{tab:exampleOne}, they are specifically chosen to show highlight how the third extrapolation option behaves with extreme data.
+All but the first configuration has $f_s=15$, which is very large but not so large that there is only one data point per oscillation.
+The first two are baseline configurations without extrapolation, the first shows every datapoint and the second shows every fifteenth.
+These are useful for comparing the values of the third configuration with the actual data points.
+The fourth configuration is the same as the third save the extrapolation method in order to show the difference between the methods.
+The fourth configuration, while slightly more informative than the second configuration, is notably difficult to follow.
+The third configuration is impressively clear, and is relatively close to the actual data points.
+
+
+
+
