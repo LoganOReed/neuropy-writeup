@@ -17,6 +17,9 @@ To minimize the runtime and memory usage of the extrapolation we've chosen to im
     \label{fig:extrapMethods}
 \end{figure}
 
+\subsection{Optimal Methods}%
+\label{sub:optimal_methods}
+
 Linear extrapolation requires a linear function defined in terms of the previous data points.
 As seen in \cref{fig:extrapMethods}, there are multiple ways of defining the linear function.
 The naive way would be to use the constant function equal to the most recent data point.
@@ -35,10 +38,32 @@ The tangent line also results in a similar number of jumps, but the jumps will g
 Because of this, the tangent line is strictly better for our use case.
 The last option doesn't contain any jumps.
 However, since it doesn't jump to the most recent data point the error bounds accumulate.
-There are ways of defining the extrapolation line to account for this.
+For example, \cref{fig:l1Jump} and \cref{fig:l1} are plots of the L1 norms for the same configuration save one using the tangent line and the other using the third option.
+Since \cref{fig:l1Jump} is set to the newest data point at the beginning of each extrapolation the L1 graph has a characteristic sawtooth shape.
+The shape of \cref{fig:l1} is similar with larger troughs due to the starting point not being an actual value point.
+Experimentally, Neuro-VISOR's time step is small enough for the error bounds to be negligably small during visualization\cite{neuropy}.
+These are the two methods that are implemented in our codebase.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\linewidth]{endpointFull_10s10ej_l1}
+    \caption{L1 Norm for Extrapolation with jumps}%
+    \label{fig:l1Jump}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\linewidth]{endpointFull_10s10e_l1}
+    \caption{L1 Norm for Extrapolation without jumps}%
+    \label{fig:l1}
+\end{figure}
+
+
+\subsection{Next Steps}%
+\label{sub:next_steps}
+
+The two extrapolation methods that we ended on, and the ones that are implemented in the code, are not necessarily the best options.
+They both have their pros and cons, however there may be ways of defining linear functions which don't contain jumps but have smaller error bounds.
 For example, one could cap the distance between the point used and the previous data point.
 Another way could be to define the slope using both the tangent slope and the distance between the starting point and previous data point.
-While this is an interesting avenue for further research, we will use this definition with the assumption that the error bounds won't cause any issues.
-Experimentally, Neuro-VISOR's time step is small enough for the error bounds to be negligably small\cite{neuropy}.
-With all of this information,  we should choose the tangent line when emphasizing the accuracy and the third option when emphasizing the user experience.
-To get a more hands on understanding of the two linear function definitions we have implmented them in neuropy.
+This is an interesting area for future study, especially showing rigorous results in this area and exploring non-linear options.
