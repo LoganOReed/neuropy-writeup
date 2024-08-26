@@ -6,14 +6,13 @@
 
 Neuro-VISOR is a project which visualizes the Hodgkin-Huxley model on neuron geometries in real time\cite{neuroVISOR}.
 One difficulty with real time simulations is that the computation time for a solve step may take longer than the time between visualization updates.
-When this happens, it results in the simulation freezing until the computation is complete followed by an abrupt jump to the computed values.
-This behaviour is not desired due to the negative user experience.
+When this happens it results in the simulation freezing until the computation is complete, which is not desired due to the negative user experience.
 This project's aim is to explore possible solutions to this problem using extrapolation methods.
 
 The main result of this project is the program neuropy\cite{neuropy}.
 The purpose of the program is to generate visualizations of the Hodgkin-Huxley model on neuron geometries utilizing extrapolation methods to minimize the impact of performance issues.
-The code has two main steps; importing data and generating the visualizations.
-Since generating the data and neuron geometries aren't the focus of the project, neuropy requires this information to be given as input files.
+The code has two main steps; importing simulation data and generating the visualizations.
+Since generating the simulation data on neuron geometries isn't the focus of the project, neuropy requires this information to be given in input files.
 This can be done using Neuro-VISOR, but neuropy will take any pair of ``.csv'' and ``.swc'' files with corresponding indices.
 It is designed to make comparison of different extrapolation methods and contexts easy and straightforward. 
 All three of the linear function definitions explained in \cref{sec:extrapolation} are implemented, and new extrapolation methods can be added by simply adding a new python function.

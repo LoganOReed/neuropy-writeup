@@ -4,13 +4,13 @@
 \section{Implementation}%
 \label{sec:implementation}
 
+The main result of this project is the program neuropy\cite{neuropy}.
 The purpose of the program is to generate visualizations of the Hodgkin-Huxley model on neuron geometries utilizing extrapolation methods to minimize the impact of performance issues.
-The code has two main steps; importing data and generating the visualizations.
-Since generating the data and neuron geometries aren't the focus of the project it is largely abstracted away.
-The program only requires a ``.csv'' and a ``.swc'' file with both indices corresponding to each other.
-The visualizations are generated using navis\cite{navis}, a python library for neuron morphologies. 
-It accepts multiple parameters, allowing different rates of reading in the data and extrapolating. 
-It is also able to use any of the three linear function definitions explained in \cref{sec:extrapolation}.
+The code has two main steps; importing simulation data and generating the visualizations.
+Since generating the simulation data on neuron geometries isn't the focus of the project, neuropy requires this information to be given in input files.
+This can be done using Neuro-VISOR, but neuropy will take any pair of ``.csv'' and ``.swc'' files with corresponding indices.
+It is designed to make comparison of different extrapolation methods and contexts easy and straightforward. 
+All three of the linear function definitions explained in \cref{sec:extrapolation} are implemented, and new extrapolation methods can be added by simply adding a new python function.
 
 
 \subsection{Importing Data}%
@@ -90,13 +90,14 @@ The last two configurations show the striking difference between the extrapolati
 
 \end{table}
 
-The four configurations in \cref{tab:exampleTwo} is more specific than \cref{tab:exampleOne}, they are specifically chosen to show highlight how the third extrapolation option behaves with extreme data.
-All but the first configuration has $f_s=15$, which is very large but not so large that there is only one data point per oscillation.
+The four configurations in \cref{tab:exampleTwo} are more similar than in \cref{tab:exampleOne}, they are specifically chosen to highlight how the third extrapolation option behaves with extreme data.
+All but the first configuration has $f_s=5$, which is very large but not so large that there is only one data point per oscillation.
 The first two are baseline configurations without extrapolation, the first shows every datapoint and the second shows every fifteenth.
 These are useful for comparing the values of the third configuration with the actual data points.
 The fourth configuration is the same as the third save the extrapolation method in order to show the difference between the methods.
 The fourth configuration, while slightly more informative than the second configuration, is notably difficult to follow.
-The third configuration is impressively clear, and is relatively close to the actual data points.
+The third configuration is impressively clear, however it is generally less accurate than the fourth configuration.
+When viewing the corresponding video on neuropy, the L1 norm is displayed each frame to make it easy to compare both the accuracy of the extrapolation methods as well as the more subjective ``feel".
 
 
 
