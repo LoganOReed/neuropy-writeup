@@ -21,6 +21,15 @@ To minimize the runtime and memory usage of the extrapolation we've chosen to im
 \label{sub:optimal_methods}
 
 Linear extrapolation requires a linear function defined in terms of the previous data points.
+We can think of linear extrapolation as a family of linear functions $\hat{u}_t : \mathbb{N} \to \mathbb{R}$ parameterized by $t \in [0,1]$ where $\hat{u}_t(n)$ is the point to which the point $u_n$ has moved at time $t$.
+The naive definition would be $\hat{u}_t(n) = u_n$, which we will call the constant function and which can be seen in \cref{fig:extrapMethods} in green.
+Technically Neuro-VISOR implements this when the visualization updates more frequently than the simulation.
+Another option is $\hat{u}_t(n) = (1-t)u_n + t(2u_n - u_{n-1})$, which corresponds to yellow in \cref{fig:extrapMethods}.
+A third option is $\hat{u}_t(n) = (1-t)(2u_{n-1} - u_{n-2}) + t(2u_n - u_{n-1})$, which can be seen as red in \cref{fig:extrapMethods}.
+
+
+Linear extrapolation requires a linear function defined in terms of the previous data points.
+For the following definitions, let $u_n$ be the values of the simulation at step $n$.
 As seen in \cref{fig:extrapMethods}, there are multiple ways of defining the linear function.
 The naive way would be to use the constant function equal to the most recent data point.
 An example of this can be seen in \cref{fig:extrapMethods} as the green option.
@@ -31,7 +40,7 @@ A third option is to use the slope between the previous two data points and the 
 This can be seen in \cref{fig:extrapMethods} in red.
 
 As mentioned in the introduction, the goal of this project is to improve the visualization and user experience of the program during unexpected slow downs.
-While this is not rigorously definied, we will suppose abrupt jumps decrease the user's experience.
+While this is not rigorously defined, we will suppose abrupt jumps decrease the user's experience.
 This seems like a reasonable heuristic as abrupt jumps are jarring and make it difficult to follow the simulation.
 The naive line results in a jump whenever a new data point is calculated unless the system is constant.
 The tangent line also results in a similar number of jumps, but the jumps will generally be smaller than the naive line.
