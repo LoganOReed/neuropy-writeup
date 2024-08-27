@@ -22,36 +22,25 @@ To minimize the runtime and memory usage of the extrapolation we've chosen to im
 
 Linear extrapolation requires a linear function defined in terms of the previous data points.
 We can think of linear extrapolation as a family of linear functions $\hat{u}_t : \mathbb{N} \to \mathbb{R}$ parameterized by $t \in [0,1]$ where $\hat{u}_t(n)$ is the point to which the point $u_n$ has moved at time $t$.
-The naive definition would be $\hat{u}_t(n) = u_n$, which we will call the constant function and which can be seen in \cref{fig:extrapMethods} in green.
+The naive definition would be $\hat{u}_t(n) = u_n$ when $t \in [0,1)$ and $\hat{u}_1(n) = u_{n+1}$, which can be seen in \cref{fig:extrapMethods} in green.
 Technically Neuro-VISOR implements this when the visualization updates more frequently than the simulation.
-Another option is $\hat{u}_t(n) = (1-t)u_n + t(2u_n - u_{n-1})$, which corresponds to yellow in \cref{fig:extrapMethods}.
+Another option is to use $\hat{u}_t(n) = (1-t)u_n + t(2u_n - u_{n-1})$ when $t \in [0,1)$ and $\hat{u}_1(n) = u_{n+1}$, which corresponds to yellow in \cref{fig:extrapMethods}.
 A third option is $\hat{u}_t(n) = (1-t)(2u_{n-1} - u_{n-2}) + t(2u_n - u_{n-1})$, which can be seen as red in \cref{fig:extrapMethods}.
-
-
-Linear extrapolation requires a linear function defined in terms of the previous data points.
-For the following definitions, let $u_n$ be the values of the simulation at step $n$.
-As seen in \cref{fig:extrapMethods}, there are multiple ways of defining the linear function.
-The naive way would be to use the constant function equal to the most recent data point.
-An example of this can be seen in \cref{fig:extrapMethods} as the green option.
-Technically Neuro-VISOR implements this when the visualization updates more frequently than the simulation.
-Another option is to use the tangent line defined by the previous two data points.
-This corresponds to the yellow option in \cref{fig:extrapMethods}.
-A third option is to use the slope between the previous two data points and the point along the previous extrapolation which coincides with the time of the most recent data point.
-This can be seen in \cref{fig:extrapMethods} in red.
 
 As mentioned in the introduction, the goal of this project is to improve the visualization and user experience of the program during unexpected slow downs.
 While this is not rigorously defined, we will suppose abrupt jumps decrease the user's experience.
 This seems like a reasonable heuristic as abrupt jumps are jarring and make it difficult to follow the simulation.
-The naive line results in a jump whenever a new data point is calculated unless the system is constant.
-The tangent line also results in a similar number of jumps, but the jumps will generally be smaller than the naive line.
-Because of this, the tangent line is strictly better for our use case.
-The third option doesn't contain any jumps.
-However, since it doesn't jump to the most recent data point the error bounds accumulate.
+Constant extrapolation results in a jump whenever $\lim_{t\to1}\hat{u}_t(n) := u_n \not= u_{n+1} =: \hat{u}_1(n)$, that is whenever the simulation isn't constant.
+``Linear extrapolation with jumps'' results in a jump whenever $\lim_{t\to1}\hat{u}_t(n) := 2u_n - u_{n-1} \not= u_{n+1} =: \hat{u}_1(n)$.
+In other words, a jump will occur whenever $u_{n+1}$ lies on the line which contains $u_{n-1}$ and $u_n$.
+``Linear extrapolation without jumps'' will never result in a jump by definition, as $\hat{u}_1(n) := 2u_n - u_{n-1} =: \hat{u}_0(n+1)$.
+While ``linear extrapolation without jumps'' will never jump, accuracy could be an issue when compared to ``linear extrapolation with jumps''.
 For example, \cref{fig:l1} shows plots of the L1 norms for the same configuration save one using linear extrapolation with jumps and the other using linear extrapolation without jumps.
-The L1 graph of the linear extrapolation with jumps has a characteristic sawtooth shape due to it's value being set to the real data point every ten steps.
+The configuration takes values of $\hat{u}_t(n)$ at $0.1$ intervals and receives every 10th data point.
+The L1 norm graph of the linear extrapolation with jumps has a characteristic sawtooth shape due to it's value being set to the real data point every ten steps.
 On the other hand, the L1 graph of the linear extrapolation with jumps will approach the value the other graph approaches before each jump due to it's definition.
-The shape of \cref{fig:l1} is similar with larger troughs due to the starting point not being an actual value point.
-These are the two methods that are implemented in our codebase.
+Because the error bounds of the linear extrapolation with jumps is smallest when $t=0$, linear extrapolation without jumps will be generally less accurate overall.
+These are the three methods that are implemented in our codebase.
 
 \begin{figure}[H]
     \centering
