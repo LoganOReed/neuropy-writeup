@@ -11,6 +11,7 @@ Since generating the simulation data on neuron geometries isn't the focus of the
 This can be done using Neuro-VISOR, but neuropy will take any pair of ``.csv'' and ``.swc'' files with corresponding indices.
 It is designed to make comparison of different extrapolation methods and contexts easy and straightforward. 
 All three of the linear function definitions explained in \cref{sec:extrapolation} are implemented, and new extrapolation methods can be added by simply adding a new python function.
+For an example python function definition, see ``extrapolate'' within the code provided in the appendix.
 
 
 \subsection{Importing Data}%
@@ -46,7 +47,8 @@ Neuropy includes $62$ examples with different parameter values and extrapolation
 However, due to the relationships between the parameters, the data, and the methods, it can be difficult to pick specific videos which demonstrate interesting differences.
 To alleviate this we will list a few specific examples and what they demonstrate alongside the relevant file names in the neuropy repository\cite{neuropy}.
 For all of the following examples, let $f_t=60$.
-Also, if ``jump'' is $1$ the tangent line was used for extrapolation, otherwise the third option was used.
+Also, if ``jump'' is $1$ the linear extrapolation with jumps is used, otherwise the linear extrapolation without jumps is used.
+Constant extrapolation is created by making $f_e = 0$. 
 
 \begin{table}[H]
     \begin{center}
@@ -66,11 +68,10 @@ Also, if ``jump'' is $1$ the tangent line was used for extrapolation, otherwise 
 
 \end{table}
 
-The four configurations in \cref{tab:exampleOne} are chosen to show the difference between no extrapolation and two extrapolations with different rates.
-It also includes both of the extrapolation techniques.
+The four configurations in \cref{tab:exampleOne} are chosen to show the difference between the three extrapolations defined in \cref{sub:optimal_methods} with different rates.
 $f_s$ is set to $5$ to make the four options more easily distinguishable without getting rid of too many data points.
-The first configuration is equivalent to disabling extrapolation, or using naive extrapolation, and is used as the baseline for the other three configurations.
-The last two configurations show the striking difference between the extrapolation methods, and the two configurations using the tangent line are only subtly  different.
+The first configuration is equivalent to constant extrapolation and is used as the baseline for the other three configurations.
+The two configurations where $f_e = 30$ show the striking difference between the non-constant linear extrapolation methods, and the two configurations using linear extrapolation with jumps are only subtly different.
 
 \begin{table}[H]
     \begin{center}
@@ -90,15 +91,14 @@ The last two configurations show the striking difference between the extrapolati
 
 \end{table}
 
-The four configurations in \cref{tab:exampleTwo} are more similar than in \cref{tab:exampleOne}, they are specifically chosen to highlight how the third extrapolation option behaves with extreme data.
-All but the first configuration has $f_s=5$, which is very large but not so large that there is only one data point per oscillation.
+The four configurations in \cref{tab:exampleTwo} are more similar than in \cref{tab:exampleOne}.
+They are specifically chosen to highlight how linear extrapolation without jumps behaves with extreme data.
+All but the first configuration has $f_s=15$, which is very large but not so large that there is only one data point per oscillation.
 The first two are baseline configurations without extrapolation, the first shows every datapoint and the second shows every fifteenth.
-These are useful for comparing the values of the third configuration with the actual data points.
+These are useful for visually judging the accuracy of the third and fourth configurations.
+The corresponding video on neuropy also displays the L1 norm for the third and fourth configurations to get actual values for their accuracy.
+Using both allows one to compare the accuracy with the more subjective ``feel'' of the extrapolation method.
 The fourth configuration is the same as the third save the extrapolation method in order to show the difference between the methods.
-The fourth configuration, while slightly more informative than the second configuration, is notably difficult to follow.
-The third configuration is impressively clear, however it is generally less accurate than the fourth configuration.
-When viewing the corresponding video on neuropy, the L1 norm is displayed each frame to make it easy to compare both the accuracy of the extrapolation methods as well as the more subjective ``feel".
-
-
+The third configuration is impressively clear compared to the fourth configuration, however it is generally less accurate than the fourth configuration.
 
 

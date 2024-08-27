@@ -30,13 +30,13 @@ A third option is $\hat{u}_t(n) = (1-t)(2u_{n-1} - u_{n-2}) + t(2u_n - u_{n-1})$
 As mentioned in the introduction, the goal of this project is to improve the visualization and user experience of the program during unexpected slow downs.
 While this is not rigorously defined, we will suppose abrupt jumps decrease the user's experience.
 This seems like a reasonable heuristic as abrupt jumps are jarring and make it difficult to follow the simulation.
-Constant extrapolation results in a jump whenever $\lim_{t\to1}\hat{u}_t(n) := u_n \not= u_{n+1} =: \hat{u}_1(n)$, that is whenever the simulation isn't constant.
-``Linear extrapolation with jumps'' results in a jump whenever $\lim_{t\to1}\hat{u}_t(n) := 2u_n - u_{n-1} \not= u_{n+1} =: \hat{u}_1(n)$.
+Constant extrapolation results in a jump whenever $\lim_{t\to1}\hat{u}_t(n) = u_n \not= u_{n+1} = \hat{u}_1(n)$, that is whenever the simulation isn't constant.
+``Linear extrapolation with jumps'' results in a jump whenever $\lim_{t\to1}\hat{u}_t(n) = 2u_n - u_{n-1} \not= u_{n+1} = \hat{u}_1(n)$.
 In other words, a jump will occur whenever $u_{n+1}$ lies on the line which contains $u_{n-1}$ and $u_n$.
 ``Linear extrapolation without jumps'' will never result in a jump by definition, as $\hat{u}_1(n) := 2u_n - u_{n-1} =: \hat{u}_0(n+1)$.
 While ``linear extrapolation without jumps'' will never jump, accuracy could be an issue when compared to ``linear extrapolation with jumps''.
 For example, \cref{fig:l1} shows plots of the L1 norms for the same configuration save one using linear extrapolation with jumps and the other using linear extrapolation without jumps.
-The configuration takes values of $\hat{u}_t(n)$ at $0.1$ intervals and receives every 10th data point.
+The configuration takes values of $\hat{u}_t(n)$ at $0.1$ intervals for $t$ and receives every 10th data point.
 The L1 norm graph of the linear extrapolation with jumps has a characteristic sawtooth shape due to it's value being set to the real data point every ten steps.
 On the other hand, the L1 graph of the linear extrapolation with jumps will approach the value the other graph approaches before each jump due to it's definition.
 Because the error bounds of the linear extrapolation with jumps is smallest when $t=0$, linear extrapolation without jumps will be generally less accurate overall.
