@@ -18,6 +18,7 @@ For an example python function definition, see ``extrapolate'' within the code p
 \label{sub:importing_data}
 The simulation values are obtained from Neuro-VISOR\cite{neuroVISOR} and are stored in the ``.csv'' format where each row corresponds to one solve step.
 The Neuron geometries are stored in the ``.swc'' file format\cite{swc} and were obtained from NeuroMorpho\cite{neuroMorpho}.
+The code uses a package called ``Navis'' which handles neuron morphologies\cite{navis}.
 It is important to note that the ``.swc'' file currently used in the code is actually obtained from Neuro-VISOR.
 While Neuro-VISOR also obtains it's ``.swc'' files from NeuroMorpho but slightly alters them, changing the order of the node indexes\cite{neuropy}.
 Neuro-VISOR doesn't provide these indices when exporting the simulation data so we are required to use it's neuron geometry files.

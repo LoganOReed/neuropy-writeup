@@ -1,3 +1,4 @@
+
 import multiprocessing
 from alive_progress import alive_bar
 import numpy as np
@@ -20,12 +21,14 @@ def extrapolate(n, i, j, numExtraps, numSkip, isJump, dir, uCurr, uProjected):
         fig.suptitle(f"Display One in {numSkip} Simulation Data Points, \n{numExtraps} Extrapolations per Data Point (from Data Point)")
     else:
         fig.suptitle(f"Display One in {numSkip} Simulation Data Points, \n{numExtraps} Extrapolations per Data Point (from Extrapolated Point)")
+
     axtext.axis('off')
     axtext.text(0,0.9, f"Simulation: {i+1}", ha='right', fontsize="large")
     axtext.text(0,0.8, f"Extrapolation: {j+1}", ha='right', fontsize="large")
     axtext.text(0,0.7, f"Extrapolation Total: {numExtraps*i+j+1}", ha='right', fontsize="large")
     plt.savefig(f'{dir}/frame{numExtraps*i + j}.png')
     plt.close()
+
     return
 
 def start():
@@ -59,7 +62,7 @@ def start():
         else:
             name = f"{args.data}_{args.fps}f{args.extrapolation_rate}e"
 
-    u = pd.read_csv(f"data/{args.data}.csv", delimiter=",", skiprows=lambda x: x % args.skip != 0, dtype=np.float64)
+    u = pd.read_csv(f"data/{args.data}.csv", delimiter=",", header=None, skiprows=lambda x:x % args.skip != 0, dtype=np.float64)
     n = nv.read_swc(f"data/{args.morphology}.swc")
 
     i = 0
@@ -73,8 +76,6 @@ def start():
                 uCurr = row.to_numpy()
                 if i == 0:
                     uPrev = uCurr
-                    uApprox = uCurr
-                if i == 1:
                     uApprox = uCurr
 
                 if args.extrapolation_rate == 0:
@@ -98,6 +99,8 @@ def start():
                         jobs.append(p)
                         p.start()
                     p.join()
+
+
                 uApprox = 2*uCurr - uPrev
                 uPrev = row.to_numpy()
                 i += 1
@@ -118,3 +121,4 @@ def start():
 
 if __name__ == "__main__":
     start()
+
